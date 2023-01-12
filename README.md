@@ -43,3 +43,27 @@ After consulting the database index, the Major Appliances dataset is selected fo
 With the data tables ready, a AWS RDS instance is created and connected to a PostgreSQL platform. A database is created within this instance, and the provided schema is used to create the initial data tables on the SQL end.
 
 A connection is then made to the AWS RDS instance to write the data tables into the SQL tables. Queries are made to verify that the process worked correctly. When the SQL tables are filled out properly, the results are then exported into CSV files for future work without requiring future connections to AWS RDS. When the exports are completed, the RDS instance is disconnected and deleted as part of the AWS cleanup process.
+
+## Analysis of Vine Reviews
+After the `vine_table` is established, an analysis can be carried out to determine if bias exists in the Vine program. There are three different ways to do this:
+
+### PySpark Method
+A new Google Colab notebook is created with the PySpark session started. The code cells used during the ETL of the Amazon Review Dataset can be used here to recreate the `vine_table` DataFrame. An alternative method is to place `vine_table.csv` into a Amazon S3 bucket so that Spark can load it into a DataFrame.
+
+This DataFrame is filtered into separate DataFrames to get usable data; the first filter gets the reviews that have at least twenty votes, and the second filter selects those reviews where at least half of the votes mark them as helpful. These helpful reviews are split into two DataFrames: One for Vine (paid) reviews and the other for non-Vine (unpaid) reviews.
+
+With these DataFrames completed, the counts of total helpful reviews, total Vine reviews, and total non-Vine reviews are obtained. Next, the counts of 5-Star reviews in the helpful DataFrame, the Vine DataFrame, and the non-Vine DataFrame are obtained. Then, these counts are used to determine the percentages of 5-Star reviews.
+
+### Pandas Method
+A new Jupyter notebook is created with Pandas and Numpy imported (Numpy is included just in case). The `vine_table.csv` is imported into a DataFrame using the `read_csv` method from Pandas.
+
+This DataFrame is filtered into separate DataFrames to get usable data; the first filter gets the reviews that have at least twenty votes, and the second filter selects those reviews where at least half of the votes mark them as helpful. These helpful reviews are split into two DataFrames: One for Vine (paid) reviews and the other for non-Vine (unpaid) reviews.
+
+With these DataFrames completed, the counts of total helpful reviews, total Vine reviews, and total non-Vine reviews are obtained. Next, the counts of 5-Star reviews in the helpful DataFrame, the Vine DataFrame, and the non-Vine DataFrame are obtained. Then, these counts are used to determine the percentages of 5-Star reviews.
+
+### SQL Method
+If the SQL tables from Deliverable 1 are not still there, then `vine_table` is to be recreated using the provided schema. The `vine_table.csv` is then used to import into the table.
+
+The first filtering query gets the reviews that have at least twenty votes into a separate table. The second filtering query selects, from that table into another separate table, the reviews where at least half of the votes mark them as helpful. These helpful reviews are split into two tables: One for Vine (paid) reviews and the other for non-Vine (unpaid) reviews.
+
+With these tables created, queries are used to get the count of total helpful reviews, the count of 5-Star reviews in the helpful DataFrame, and the percentage of 5-Star reviews. This is also done for Vine reviews and non-Vine reviews.
