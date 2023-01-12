@@ -38,7 +38,7 @@ The scale of data involved would strain a conventional computer, so online resou
 ## ETL of Amazon Review Dataset
 The first three cells in the Colab Notebook script initializes Spark, installs the PostgreSQL driver, and initializes the Spark session.
 
-After consulting the database index, the Major Appliances dataset is selected for this analysis. The URL to this dataset is taken from the index and entered into the SparkFiles function to read the data into a Spark DataFrame. With the DataFrame established, data tables are created by extracting various columns, transforming them, and naming them in accordance with the provided schema. The data tables must match the schema in column name and data type to write into the PostgreSQL tables correctly.
+After consulting the database index, the **Major Appliances** dataset is selected for this analysis. The URL to this dataset is taken from the index and entered into the SparkFiles function to read the data into a Spark DataFrame. With the DataFrame established, data tables are created by extracting various columns, transforming them, and naming them in accordance with the provided schema. The data tables must match the schema in column name and data type to write into the PostgreSQL tables correctly.
 
 With the data tables ready, a AWS RDS instance is created and connected to a PostgreSQL platform. A database is created within this instance, and the provided schema is used to create the initial data tables on the SQL end.
 
@@ -67,3 +67,23 @@ If the SQL tables from Deliverable 1 are not still there, then `vine_table` is t
 The first filtering query gets the reviews that have at least twenty votes into a separate table. The second filtering query selects, from that table into another separate table, the reviews where at least half of the votes mark them as helpful. These helpful reviews are split into two tables: One for Vine (paid) reviews and the other for non-Vine (unpaid) reviews.
 
 With these tables created, queries are used to get the count of total helpful reviews, the count of 5-Star reviews in the helpful DataFrame, and the percentage of 5-Star reviews. This is also done for Vine reviews and non-Vine reviews.
+
+## Results
+With the analysis complete, the results are tabulated below.
+
+DATASET SELECTED: **MAJOR APPLIANCES**
+
+| Review Type | Total Reviews | 5-Star Reviews | 5-Star Percentage |
+| --- | ---: | ---: | ---: |
+| Helpful | 4,992 | 1,981 | 39.683% |
+| Vine (paid) | 35 | 18 | 51.429% |
+| non-Vine (unpaid) | 4,957 | 1,963 | 39.601% |
+
+## Summary
+Even if the percentages can imply a bias towards more positive reviews among Vine (paid) members, that hypothesis cannot be fully validated, especially in the Major Appliances dataset with such a small pool of Vine reviews. Even if there is a more balanced proportion of Vine to non-Vine members, a better way to check for positivity bias in individual datasets could involve charting out the distribution of the star-ratings for Vine and non-Vine groups in each dataset.
+
+Another approach is to get the percentages of 5-Star reviews for each dataset, getting the mean percentages for these collections, and then running a statistical t-test to check the p-values for statistical significance.
+
+At a deeper level, the 5-Star reviews can be run through Natural Language Processing to verify that the actual review content truly reflects the star rating.
+
+Filtering reviews for verified purchases could help to ensure that the reviews are genuine based on actual experience with the product. However, filtering reviews in this manner may run the risk of leaving a very small pool for analysis.
